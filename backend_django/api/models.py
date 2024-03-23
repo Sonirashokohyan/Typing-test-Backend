@@ -7,9 +7,9 @@ class User(AbstractUser):
     REQUIRED_FIELDS =[]
     
 class TypingTest(models.Model):
-    date = models.DateField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
     wpm = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'Typing Test: {self.date} - User: {self.user}'

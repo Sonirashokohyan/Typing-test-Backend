@@ -53,7 +53,7 @@ class LoginView(APIView):
         }
         token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
         response = Response()
-        response.data = {'token':token}
+        response.data = {'token':token,'name':user.name}
         return response
 
 class LogoutView(APIView):
@@ -90,7 +90,7 @@ class RecordView(APIView):
         payload = verify_jwt_token(c_token)
         user_id = payload.get('id')
         user = User.objects.filter(id=user_id).first()
-        typingTests = TypingTest.objects.filter(user_id = user.id)[:5]
+        typingTests = TypingTest.objects.filter(user_id = user.id).order_by('-date')[:7]
         serializer = TypingTestSerializer(typingTests,many=True)
         
         if(user):
@@ -100,7 +100,6 @@ class RecordView(APIView):
     
 class RecordSave(APIView):
     def post(self, request):
-        
         newWpm = request.data['WPM']
         c_token = request.data['token']
         print(newWpm,c_token)
